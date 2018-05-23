@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+    <ui:composition template="/templates/teamplate.xhtml">
+
+
+        <ui:define name="left_menu">
+
+
+            <h:form styleClass="genres">
+                <h4>Покупатели:</h4>
+                <ui:repeat value="${byuerController.fillAllByuers()}" var="b">
+                    <h:column>
+                        <h:commandLink value="${b.name}" action="${searchController.fillByuerTransactions()}">
+                            <f:param name="buyer_id" value="${b.id}"/>
+                        </h:commandLink>
+                    </h:column>
+                </ui:repeat>
+
+                <h4>Продавцы:</h4>
+                <ui:repeat value="${sellerController.fillAllSellers()}" var="s">
+                    <h:commandLink value="${s.name}" action="${searchController.fillSellerTransactions()}">
+                        <f:param name="seller_id" value="${s.id}"/>
+                    </h:commandLink>
+                </ui:repeat>
+
+                <h4>Товары:</h4>
+                <ui:repeat value="${productController.fillAllProducts()}" var="p">
+                    <h:commandLink value="${p.name}" action="${searchController.fillProductTransactions()}">
+                        <f:param name="product_id" value="${p.id}"/>
+                    </h:commandLink>
+                </ui:repeat>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="footer">
+            <div class="footer"> Разработчик: Евгений Трахимович.</div>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form>
+                <h:dataTable id="contentList" value="${byuerController.byuer}" var="b" cellspacing="10px"
+                             columnClasses="col2, col2, col2, col2, col2">
+                    <h:column>
+                        <p>Сведения о продавце:</p>
+                    </h:column>
+
+                    <h:column>
+                        <p>Наименование: <strong>
+                            <h:outputText value="${b.name}" rendered="${!byuerController.editMode}"/>
+                            <h:inputText value="${b.name}" rendered="${byuerController.editMode}"/>
+                        </strong></p>
+                        <p>УНП: <strong>
+                            <h:outputText value="${b.unp}" rendered="${!byuerController.editMode}"/>
+                            <h:inputText value="${b.unp}" rendered="${byuerController.editMode}"/>
+                        </strong></p>
+                        <p>Юридический адресс: <strong>
+                            <h:outputText value="${b.address}" rendered="${!byuerController.editMode}"/>
+                            <h:inputText value="${b.address}" rendered="${byuerController.editMode}"/>
+                        </strong></p>
+
+                    </h:column>
+                    <h:column>
+                        <h:commandButton value="Редактировать" action="${byuerController.switchEditMode()}" rendered="${!byuerController.editMode}"/>
+
+                        <h:commandButton value="Назад" action="${loginController.back()}" rendered="${!byuerController.editMode}"/>
+
+                        <h:commandButton action="${byuerController.updateByuer()}" rendered="${byuerController.editMode}" value="Сохранить"/>
+                        <h:commandButton immediate="true" action="${byuerController.switchEditMode()}" rendered="#{byuerController.editMode}" value="Отмена"/>
+                    </h:column>
+
+
+                </h:dataTable>
+            </h:form>
+
+
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

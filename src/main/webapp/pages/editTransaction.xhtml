@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+<h:body>
+
+
+    <p:dialog header="Добавить биржевую сделку" widgetVar="dlg2" modal="true" dynamic="true" resizable="false"
+              closable="true" >
+
+
+
+
+        <h:form id="addTransactionsForm">
+            <p:message id="growl" showDetail="true" sticky="true" for="saveButton" />
+            <p:panel>
+
+                <h:panelGrid id="grid" columns="3" cellpadding="5">
+                    <h:outputLabel for="referenceExchangeNumber" value="Регистрационный номер биржевой сделки:"
+                                   style="font-weight:bold"/>
+                    <p:inputText id="referenceExchangeNumber" required="true" label="Внимание"
+                                 value="${transactionController.addTransaction.referenceExchangeNumber}">
+                        <f:validateLongRange/>
+                    </p:inputText>
+                    <p:message for="referenceExchangeNumber" id="referenceExchangeNumberError"/>
+
+
+                    <h:outputLabel for="transactionDate" value="Дата биржевой сделки:" style="font-weight:bold"/>
+                    <p:inputText id="transactionDate" required="true" label="Внимание"
+                                 value="${transactionController.addTransaction.transactionDate}">
+
+                    </p:inputText>
+                    <p:message for="transactionDate" id="transactionDateError"/>
+
+
+                    <h:outputLabel for="nameTraidingSession" value="Наименование торговой сессии:"
+                                   style="font-weight:bold"/>
+                    <p:inputText id="nameTraidingSession" required="true" label="Внимание"
+                                 value="${transactionController.addTransaction.nameTraidingSession}">
+
+                    </p:inputText>
+                    <p:message for="nameTraidingSession" id="nameTraidingSessionError"/>
+
+
+                    <h:outputLabel for="amountExchangeTransaction" value="Сумма биржевой сделки:"
+                                   style="font-weight:bold"/>
+                    <p:inputText id="amountExchangeTransaction" required="true" label="Внимание"
+                                 value="${transactionController.addTransaction.amountExchangeTransaction}">
+                        <f:validateLongRange/>
+
+                    </p:inputText>
+                    <p:message for="amountExchangeTransaction" id="amountExchangeTransactionError"/>
+
+                    <h:outputLabel for="byuer" value="Покупатель:" style="font-weight:bold"/>
+                    <p:selectOneMenu id="byuer" required="true" label="Name"
+                                     value="${transactionController.addTransaction.byuer}" converter="${byuerController}">
+                        <f:selectItems value="${byuerController.selectItems}"/>
+                    </p:selectOneMenu>
+                    <p:message for="byuer" id="byuerError"/>
+
+
+                    <h:outputLabel for="seller" value="Продавец:" style="font-weight:bold"/>
+
+                    <p:selectOneMenu required="true" id="seller" label="Внимание"
+                                     value="${transactionController.addTransaction.seller}"
+                                     converter="${sellerController}">
+                        <f:selectItems value="${sellerController.selectItems}"/>
+                    </p:selectOneMenu>
+                    <p:message for="seller" id="sellerError"/>
+
+
+                    <h:outputLabel for="product" value="Товар:" style="font-weight:bold"/>
+                    <p:selectOneMenu id="product" required="true" label="Внимание"
+                                     value="${transactionController.addTransaction.product}"
+                                     converter="${productController}">
+
+                        <f:selectItems value="${productController.selectItems}"/>
+                    </p:selectOneMenu>
+                    <p:message for="product" id="productError"/>
+
+
+                </h:panelGrid>
+
+
+            </p:panel>
+
+                    <p:commandButton id="saveButton" value="Добавить" update="grid :addTransactionsForm :transactionsListForm growl" icon="ui-icon-check"
+                                     style="margin-right:10px" action="${transactionController.addTransaction()}"
+                                     onclick="this.disabled=true;" actionListener="${dBMsg.info()}">
+
+                    </p:commandButton>
+
+
+
+        </h:form>
+    </p:dialog>
+
+
+</h:body>
+</html>

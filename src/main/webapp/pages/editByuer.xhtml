@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+<h:body>
+
+
+    <p:dialog header="Добавить покупателя" widgetVar="dlgByuer" modal="true" dynamic="true" resizable="false"
+              closable="true">
+
+
+        <h:form id="addByuerForm">
+
+            <p:panel>
+
+                <h:panelGrid id="gridByuer" columns="3" cellpadding="5">
+                    <h:outputLabel for="nameByuer" value="Наименование покупателя:"
+                                   style="font-weight:bold"/>
+                    <p:inputText id="nameByuer" required="true" label="Внимание"
+                                 value="${byuerController.addByuer.name}">
+
+                    </p:inputText>
+                    <p:message for="nameByuer" id="nameError"/>
+
+
+                    <h:outputLabel for="unpByuer" value="УНП покупателя:" style="font-weight:bold"/>
+                    <p:inputText id="unpByuer" required="true" label="Внимание"
+                                 value="${byuerController.addByuer.unp}">
+
+                    </p:inputText>
+                    <p:message for="unpByuer" id="unpError"/>
+
+
+                    <h:outputLabel for="addressByuer" value="Юридический адресс покупателя:"
+                                   style="font-weight:bold"/>
+                    <p:inputText id="addressByuer" required="true" label="Внимание"
+                                 value="${byuerController.addByuer.address}">
+
+                    </p:inputText>
+                    <p:message for="addressByuer" id="addressError"/>
+
+
+                </h:panelGrid>
+
+
+            </p:panel>
+
+            <p:commandButton id="saveButton" value="Добавить"
+                             update="gridByuer" icon="ui-icon-check"
+                             style="margin-right:10px" action="${byuerController.addByuer()}"
+                             onclick="this.disabled=true;">
+
+            </p:commandButton>
+
+
+        </h:form>
+    </p:dialog>
+
+
+</h:body>
+</html>

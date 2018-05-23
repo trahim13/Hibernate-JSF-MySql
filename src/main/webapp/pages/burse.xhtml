@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Биржа</title>
+    <h:outputStylesheet library="css" name="burse.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</h:head>
+
+
+<h:body>
+    <ui:composition template="/templates/teamplate.xhtml">
+
+
+        <ui:define name="left_menu">
+
+
+            <h:form styleClass="genres">
+                <h4>Покупатели:</h4>
+                <ui:repeat value="${byuerController.fillAllByuers()}" var="b">
+                    <h:column>
+                        <h:commandLink value="${b.name}" action="${searchController.fillByuerTransactions()}">
+                            <f:param name="buyer_id" value="${b.id}"/>
+                        </h:commandLink>
+                    </h:column>
+                </ui:repeat>
+
+                <h4>Продавцы:</h4>
+                <ui:repeat value="${sellerController.fillAllSellers()}" var="s">
+                    <h:commandLink value="${s.name}" action="${searchController.fillSellerTransactions()}">
+                        <f:param name="seller_id" value="${s.id}"/>
+                    </h:commandLink>
+                </ui:repeat>
+
+                <h4>Товары:</h4>
+                <ui:repeat value="${productController.fillAllProducts()}" var="p">
+                    <h:commandLink value="${p.name}" action="${searchController.fillProductTransactions()}">
+                        <f:param name="product_id" value="${p.id}"/>
+                    </h:commandLink>
+                </ui:repeat>
+            </h:form>
+        </ui:define>
+
+
+
+
+
+        <ui:define name="footer">
+            <div class="footer"> Разработчик: Евгений Трахимович.</div>
+        </ui:define>
+
+
+
+
+
+
+
+
+        <ui:define name="content">
+
+            <ui:include src="editTransaction.xhtml"/>
+            <ui:include src="editByuer.xhtml"/>
+            <ui:include src="editSeller.xhtml"/>
+
+
+            <h:form id="transactionsListForm">
+
+
+                <p:growl id="growl" showDetail="true" sticky="true" life="3000" for="transactionsListForm"/>
+
+                <p:messages id="messages" showDetail="true" closable="true" for="transactionsListForm">
+                    <p:autoUpdate/>
+                </p:messages>
+
+
+                        <strong>Добавить: </strong><p:commandButton value="биржевую сделку"  onclick="PF('dlg2').show();" action="${transactionController.switchAddMode()}">
+
+                        </p:commandButton>
+
+
+
+                        <p:commandButton value="покупателя"  onclick="PF('dlgByuer').show();" action="${byuerController.switchAddMode()}">
+
+                        </p:commandButton>
+
+
+
+
+
+                        <p:commandButton value="продавца"  onclick="PF('dlgSeller').show();" action="${sellerController.switchAddMode()}">
+
+                        </p:commandButton>
+
+
+
+
+
+
+
+
+
+
+
+                <h:commandButton action="#{searchController.switchEditMode}" rendered="#{!searchController.editMode}"
+                                 value="Редактировать">
+                    <f:ajax execute="@form" render="@form"/>
+                </h:commandButton>
+
+                <h:commandButton action="${searchController.updateExchangeTransaction()}"
+                                 rendered="${searchController.editMode}" value="Сохранить" button="false"/>
+                <h:commandButton immediate="true" action="${searchController.switchEditMode()}"
+                                 rendered="#{searchController.editMode}" value="Отмена"
+                                 actionListener="${testMessages.saveMessage()}" button="false"/>
+
+
+                <p:dataTable lazy="true" id="contentList" value="${searchController.transactionList}" var="b"
+                             cellspacing="10px"
+                             paginator="true" rows="5" rowsPerPageTemplate="1, 5, 10, 15, 100"
+                             paginatorTemplate="{RowsPerPageDropdown}  {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                             paginatorAlwaysVisible="true" emptyMessage="Не найдено записей.">
+
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink value="Скачать xls (Демо)">
+                            <p:dataExporter type="xls" target="contentList" fileName="content"/>
+                        </h:commandLink>
+
+
+                    </f:facet>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
+                        </f:facet>
+                        <h:outputText value="${b.id}"/>
+
+
+                    </p:column>
+
+                    <p:column headerText="Сделка" styleClass="col2">
+
+
+                        <p>Регистрационный номер биржевой сделки:
+                            <strong>
+                                <h:outputText value="${b.referenceExchangeNumber}"
+                                              rendered="${!searchController.editMode}"/>
+                                <h:inputText value="${b.referenceExchangeNumber}"
+                                             rendered="${searchController.editMode}"/>
+                            </strong></p>
+
+                        <p>Дата биржевой сделки: <strong>
+                            <h:outputText value="${b.transactionDate}" rendered="${!searchController.editMode}"/>
+                            <h:inputText value="${b.transactionDate}" rendered="${searchController.editMode}"/>
+                        </strong></p>
+                        <p>Наименование торговой ссесии: <strong>
+                            <h:outputText value="${b.nameTraidingSession}" rendered="${!searchController.editMode}"/>
+                            <h:inputText value="${b.nameTraidingSession}" rendered="${searchController.editMode}"/>
+                        </strong></p>
+                        <p>Сумма биржевой сделки: <strong>
+                            <h:outputText value="${b.amountExchangeTransaction}"
+                                          rendered="${!searchController.editMode}"/>
+                            <h:inputText value="${b.amountExchangeTransaction}"
+                                         rendered="${searchController.editMode}"/>
+                        </strong></p>
+                    </p:column>
+
+                    <p:column headerText="Продавец">
+                        <h:commandLink value="${b.seller.name}" action="${sellerController.fillCurrentSeller()}"
+                                       rendered="${!searchController.editMode}">
+                            <f:param name="seller_id" value="${b.seller.id}"/>
+                        </h:commandLink>
+                        <h:selectOneMenu rendered="#{searchController.editMode}" value="#{b.seller}"
+                                         converter="${sellerController}">
+                            <f:selectItems value="${sellerController.selectItems}"/>
+                        </h:selectOneMenu>
+                    </p:column>
+
+                    <p:column headerText="Покупатель">
+                        <h:commandLink value="${b.byuer.name}" action="${byuerController.fillCurrentByuer()}"
+                                       rendered="${!searchController.editMode}">
+                            <f:param name="byuer_id" value="${b.byuer.id}"/>
+                        </h:commandLink>
+                        <h:selectOneMenu rendered="${searchController.editMode}" value="${b.byuer}"
+                                         converter="${byuerController}">
+                            <f:selectItems value="${byuerController.selectItems}"/>
+                        </h:selectOneMenu>
+                    </p:column>
+
+                    <p:column headerText="Товар">
+                        <h:commandLink value="${b.product.name}" action="${productController.fillCurrentProduct()}"
+                                       rendered="${!searchController.editMode}">
+                            <f:param name="product_id" value="${b.product.id}"/>
+                        </h:commandLink>
+                        <h:selectOneMenu rendered="${searchController.editMode}" value="${b.product}"
+                                         converter="${productController}">
+                            <f:selectItems value="${productController.selectItems}"/>
+
+                        </h:selectOneMenu>
+
+                    </p:column>
+
+                    <p:column headerText="Редактировать" rendered="${!searchController.editMode}">
+
+
+                        <h:commandButton action="${transactionController.fillCurrentTransaction()}"
+                                         rendered="${!searchController.editMode}" value="Удалить">
+                            <f:param name="transaction_id" value="${b.id}"/>
+
+                        </h:commandButton>
+
+
+                    </p:column>
+
+                </p:dataTable>
+
+
+            </h:form>
+
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

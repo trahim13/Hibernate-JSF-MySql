@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Добро пожаловать!</title>
+    <h:outputStylesheet library="css" name="burse.css"/>
+    <h:outputScript library="js" name="burse.js"/>
+</h:head>
+<h:body>
+
+
+    <h:form>
+        <h:inputText id="username" value="${user.name}" required="true"
+                     requiredMessage="Поле обязательно для заполнения.">
+            <f:ajax event="keyup" render="loginError"/>
+        </h:inputText>
+        <h:commandButton action="${loginController.login()}" value="Войти"
+                         onclick="return checkValue(this.form, 'Форма не должна быть пустой.')">
+        </h:commandButton>
+        <h:message for="username" id="loginError" style="color: darkgoldenrod"/>
+</h:form>
+</h:body>
+
+
+        </html>
